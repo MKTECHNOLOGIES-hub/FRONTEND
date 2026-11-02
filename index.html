@@ -13,6 +13,7 @@
     
     <!-- FIREBASE SDKs (Compat Version for simple HTML single-file use) -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
     <style>
@@ -111,21 +112,34 @@
     <!-- 3. CART SCREEN -->
     <section id="screen-cart" class="app-screen px-5 py-4 space-y-4">
         <h2 class="text-base font-bold text-slate-900">Shopping Cart</h2>
-        <div id="cartItemsList" class="space-y-3 min-h-[180px]">
+        <div id="cartItemsList" class="space-y-3 min-h-[140px]">
             <!-- Dynamic Cart Items -->
         </div>
 
-        <!-- Customer Checkout Info Form -->
+        <!-- Customer Checkout Info Form (Professional Layout) -->
         <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-xs space-y-3">
-            <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Shipping Details</h3>
-            <input type="text" id="custName" placeholder="Full Name (e.g., Arain)" class="w-full bg-slate-100 text-xs p-2.5 rounded-xl focus:outline-none">
-            <input type="text" id="custPhone" placeholder="Phone Number (e.g., 03001234567)" class="w-full bg-slate-100 text-xs p-2.5 rounded-xl focus:outline-none">
-            <input type="email" id="custEmail" placeholder="Email Address" class="w-full bg-slate-100 text-xs p-2.5 rounded-xl focus:outline-none">
-            <input type="text" id="custAddress" placeholder="Street Address" class="w-full bg-slate-100 text-xs p-2.5 rounded-xl focus:outline-none">
-            <div class="flex gap-2">
-                <input type="text" id="custCity" placeholder="City (e.g., Lahore)" class="w-1/2 bg-slate-100 text-xs p-2.5 rounded-xl focus:outline-none">
-                <input type="text" id="custPostal" placeholder="Postal Code" class="w-1/2 bg-slate-100 text-xs p-2.5 rounded-xl focus:outline-none">
+            <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
+                <i data-lucide="user-check" class="w-4 h-4 text-slate-600"></i> Contact Details
+            </h3>
+            <input type="text" id="custName" placeholder="Full Name (e.g., Arain)" class="w-full bg-slate-100 text-xs p-3 rounded-xl focus:outline-none">
+            <input type="text" id="custPhone" placeholder="Phone Number (e.g., 03001234567)" class="w-full bg-slate-100 text-xs p-3 rounded-xl focus:outline-none">
+            <input type="text" id="custWhatsapp" placeholder="WhatsApp Number" class="w-full bg-slate-100 text-xs p-3 rounded-xl focus:outline-none">
+        </div>
+
+        <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-xs space-y-3">
+            <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
+                <i data-lucide="map-pin" class="w-4 h-4 text-slate-600"></i> Address Details
+            </h3>
+            
+            <!-- Custom Select City Trigger Button -->
+            <div onclick="openCityModal()" class="w-full bg-slate-100 text-xs p-3 rounded-xl flex items-center justify-between cursor-pointer text-slate-700">
+                <span id="selectedCityText">Select City...</span>
+                <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400"></i>
             </div>
+
+            <input type="text" id="custArea" placeholder="Sector / Block / Area Name" class="w-full bg-slate-100 text-xs p-3 rounded-xl focus:outline-none">
+            <input type="text" id="custAddress" placeholder="Full Street Address" class="w-full bg-slate-100 text-xs p-3 rounded-xl focus:outline-none">
+            <input type="text" id="custLandmark" placeholder="Mashoor Jagah / Landmark (Optional)" class="w-full bg-slate-100 text-xs p-3 rounded-xl focus:outline-none">
         </div>
 
         <!-- Payment Method Section (Cash on Delivery) -->
@@ -135,12 +149,12 @@
                 <input type="radio" name="paymentMethod" value="COD" checked class="accent-slate-900">
                 <div class="text-xs">
                     <p class="font-bold text-slate-900">Cash on Delivery (COD)</p>
-                    <p class="text-[10px] text-slate-500">Pay securely when your package arrives at your doorstep.</p>
+                    <p class="text-[10px] text-slate-500">Pay securely when your package arrives.</p>
                 </div>
             </label>
         </div>
 
-        <!-- Cart Summary & Firestore Order Checkout -->
+        <!-- Cart Summary & Checkout -->
         <div class="border-t border-slate-200 pt-3 space-y-3 bg-white p-4 rounded-2xl shadow-xs">
             <div class="flex justify-between text-xs font-semibold">
                 <span class="text-slate-500">Subtotal:</span>
@@ -154,14 +168,44 @@
 
     <!-- 4. PROFILE SCREEN -->
     <section id="screen-profile" class="app-screen px-5 py-6 space-y-4">
-        <div class="flex items-center gap-3 p-4 bg-white rounded-2xl shadow-xs border border-slate-100">
-            <div class="w-12 h-12 rounded-full bg-slate-900 text-white font-bold flex items-center justify-center text-sm">MK</div>
-            <div>
-                <h3 class="text-sm font-bold text-slate-900">M.K TECH Store Owner</h3>
-                <p class="text-xs text-slate-400">Connected to Firebase Firestore 🚀</p>
-            </div>
+        <div class="bg-white p-4 rounded-2xl shadow-xs border border-slate-100 space-y-1">
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Anonymous User UID</span>
+            <p id="userUidDisplay" class="text-xs font-mono font-bold text-slate-900 truncate">Loading...</p>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-slate-100 divide-y divide-slate-100 text-xs font-semibold">
+            <button onclick="openSubPage('faq')" class="w-full p-4 flex items-center justify-between hover:bg-slate-50 transition">
+                <span class="flex items-center gap-2"><i data-lucide="help-circle" class="w-4 h-4 text-slate-600"></i> FAQ</span>
+                <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
+            </button>
+            <button onclick="openSubPage('feedback')" class="w-full p-4 flex items-center justify-between hover:bg-slate-50 transition">
+                <span class="flex items-center gap-2"><i data-lucide="message-square" class="w-4 h-4 text-slate-600"></i> Feedback</span>
+                <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
+            </button>
+            <button onclick="openSubPage('terms')" class="w-full p-4 flex items-center justify-between hover:bg-slate-50 transition">
+                <span class="flex items-center gap-2"><i data-lucide="file-text" class="w-4 h-4 text-slate-600"></i> Terms & Conditions</span>
+                <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
+            </button>
+            <button onclick="openSubPage('about')" class="w-full p-4 flex items-center justify-between hover:bg-slate-50 transition">
+                <span class="flex items-center gap-2"><i data-lucide="info" class="w-4 h-4 text-slate-600"></i> About</span>
+                <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
+            </button>
         </div>
     </section>
+
+    <!-- ================= SUB-PAGES MODAL (FAQ, Feedback, Terms, About) ================= -->
+    <div id="subPageModal" class="fixed inset-0 bg-white z-50 hidden flex flex-col">
+        <div class="px-5 py-4 flex items-center justify-between border-b border-slate-100 bg-white sticky top-0">
+            <button onclick="closeSubPage()" class="p-2 -ml-2 text-slate-700 flex items-center gap-1 text-xs font-semibold">
+                <i data-lucide="arrow-left" class="w-5 h-5"></i> Back
+            </button>
+            <h2 id="subPageTitle" class="text-xs font-bold text-slate-900 uppercase tracking-wider"></h2>
+            <div class="w-8"></div>
+        </div>
+        <div id="subPageContent" class="flex-1 overflow-y-auto p-5 text-xs text-slate-600 space-y-3 leading-relaxed">
+            <!-- Dynamic content -->
+        </div>
+    </div>
 
     <!-- ================= PRODUCT DETAIL VIEW ================= -->
     <div id="productDetailView" class="fixed inset-0 bg-white z-50 hidden overflow-y-auto">
@@ -198,6 +242,27 @@
         </div>
     </div>
 
+    <!-- ================= CITY SELECTION MODAL ================= -->
+    <div id="cityModal" class="fixed inset-0 bg-white z-50 hidden flex flex-col">
+        <div class="px-5 py-4 flex items-center justify-between border-b border-slate-100 bg-white sticky top-0">
+            <button onclick="closeCityModal()" class="p-2 -ml-2 text-slate-700">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <h2 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Select City and Area</h2>
+            <div class="w-5"></div>
+        </div>
+        <div class="px-5 py-3 bg-slate-50 border-b border-slate-100">
+            <div class="relative">
+                <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                <input type="text" id="citySearchInput" oninput="filterCityList()" placeholder="Search..." 
+                    class="w-full bg-white text-xs text-slate-800 placeholder-slate-400 pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none">
+            </div>
+        </div>
+        <div id="cityListContainer" class="flex-1 overflow-y-auto px-5 divide-y divide-slate-100 text-xs">
+            <!-- Dynamic Cities List -->
+        </div>
+    </div>
+
     <!-- ================= BOTTOM NAVIGATION BAR ================= -->
     <nav class="fixed bottom-0 inset-x-0 max-w-md mx-auto bg-white/90 backdrop-blur-md border-t border-slate-200/80 px-6 py-2.5 flex items-center justify-between z-40">
         <button onclick="switchTab('home')" class="nav-btn active flex flex-col items-center gap-1 text-slate-900" data-tab="home">
@@ -231,13 +296,45 @@
         };
 
         firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
         const db = firebase.firestore();
 
         let products = [];
         let cart = [];
         let activeCategory = 'all';
 
+        // Pakistani Cities List for Selector
+        const pakistaniCities = [
+            "Abbas Pur-Azad kashmir", "Abbottabad-Khyber Pakhtunkhwa", "Abdul Hakim-Punjab", 
+            "Ahmed Pur East-Punjab", "Ahmedpur Sial-Punjab", "Akora Khattak-Khyber Pakhtunkhwa", 
+            "Ali Pur Chatta-Punjab", "Arifwala-Punjab", "Attock-Punjab", "Badin-Sindh", 
+            "Bagh-Azad kashmir", "Bahawalnagar-Punjab", "Bahawalpur-Punjab", "Bannu-Khyber Pakhtunkhwa", 
+            "Bhalwal-Punjab", "Bhimber-A.K-Azad kashmir", "Burewala-Punjab", "Chakwal-Punjab", 
+            "Charsadda-Khyber Pakhtunkhwa", "Chichawatni-Punjab", "Chiniot-Faisalabad-Punjab", 
+            "Chishtian-Punjab", "Dadu-Sindh", "Dera Ghazi Khan-Punjab", "Faisalabad-Punjab", 
+            "Gojra-Punjab", "Gujar Khan-Punjab", "Gujranwala-Punjab", "Gujrat-Punjab", 
+            "Hafizabad-Punjab", "Haripur-Khyber Pakhtunkhwa", "Hyderabad-Sindh", "Islamabad-Federal", 
+            "Jacobabad-Sindh", "Jaranwala-Punjab", "Jhang-Punjab", "Jhelum-Punjab", "Kamoke-Punjab", 
+            "Karachi-Sindh", "Kasur-Punjab", "Khanewal-Punjab", "Khushab-Punjab", "Kohat-Khyber Pakhtunkhwa", 
+            "Lahore-Punjab", "Larkana-Sindh", "Mandi Bahauddin-Punjab", "Mansehra-Khyber Pakhtunkhwa", 
+            "Mardan-Khyber Pakhtunkhwa", "Mianwali-Punjab", "Multan-Punjab", "Murree-Punjab", 
+            "Muzaffarabad-Azad kashmir", "Muzaffargarh-Punjab", "Nawabshah-Sindh", "Nowshera-Khyber Pakhtunkhwa", 
+            "Okara-Punjab", "Pakpattan-Punjab", "Peshawar-Khyber Pakhtunkhwa", "Quetta-Balochistan", 
+            "Rahim Yar Khan-Punjab", "Rawalpindi-Punjab", "Sadiqabad-Punjab", "Sahiwal-Punjab", 
+            "Sargodha-Punjab", "Sheikhupura-Punjab", "Sialkot-Punjab", "Sukkur-Sindh", "Vehari-Punjab", "Wah Cantt-Punjab"
+        ];
+        let selectedCity = "";
+
         document.addEventListener('DOMContentLoaded', () => {
+            // Sign in anonymously to get Firebase UID
+            auth.signInAnonymously().then((userCredential) => {
+                const uid = userCredential.user.uid;
+                document.getElementById('userUidDisplay').innerText = uid;
+            }).catch((error) => {
+                console.error("Auth error:", error);
+                document.getElementById('userUidDisplay').innerText = "Offline / Guest";
+            });
+
             fetchProductsFromFirestore();
             lucide.createIcons();
         });
@@ -248,13 +345,6 @@
                 querySnapshot.forEach((doc) => {
                     products.push({ firestoreId: doc.id, ...doc.data() });
                 });
-                
-                if(products.length === 0) {
-                    products = [
-                        { id: 1, name: 'Series 9 Ultra Watch', category: 'watches', price: 6499, image: 'https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?auto=format&fit=crop&w=500&q=80', description: 'Ultra Amoled HD display.' },
-                        { id: 2, name: 'ANC Pro 2 Earbuds', category: 'earbuds', price: 4199, image: 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=500&q=80', description: 'Active Noise Cancellation.' }
-                    ];
-                }
 
                 renderProducts(products);
                 renderHomeTrending();
@@ -280,6 +370,10 @@
         function renderProducts(items) {
             const grid = document.getElementById('productGrid');
             grid.innerHTML = '';
+            if(items.length === 0) {
+                grid.innerHTML = `<p class="text-xs text-slate-400 text-center py-8 col-span-2">Loading products...</p>`;
+                return;
+            }
             items.forEach(p => {
                 const card = `
                     <div onclick="openProductDetail(${p.id})" class="cursor-pointer group">
@@ -290,7 +384,7 @@
                             </button>
                         </div>
                         <h3 class="text-xs font-semibold text-slate-800 truncate">${p.name}</h3>
-                        <p class="text-[11px] font-bold text-slate-900">Rs. ${p.price.toLocaleString()}</p>
+                        <p class="text-[11px] font-bold text-slate-900">Rs. ${Number(p.price).toLocaleString()}</p>
                     </div>
                 `;
                 grid.insertAdjacentHTML('beforeend', card);
@@ -301,6 +395,10 @@
         function renderHomeTrending() {
             const container = document.getElementById('homeTrendingGrid');
             container.innerHTML = '';
+            if(products.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-400 text-center py-4 col-span-2">Loading...</p>`;
+                return;
+            }
             products.slice(0, 4).forEach(p => {
                 const card = `
                     <div onclick="openProductDetail(${p.id})" class="cursor-pointer bg-white p-2.5 rounded-2xl border border-slate-100 shadow-xs">
@@ -308,11 +406,12 @@
                             <img src="${p.image}" class="w-full h-full object-cover">
                         </div>
                         <h4 class="text-xs font-bold text-slate-800 truncate">${p.name}</h4>
-                        <p class="text-[11px] font-semibold text-slate-900">Rs. ${p.price.toLocaleString()}</p>
+                        <p class="text-[11px] font-semibold text-slate-900">Rs. ${Number(p.price).toLocaleString()}</p>
                     </div>
                 `;
                 container.insertAdjacentHTML('beforeend', card);
             });
+            lucide.createIcons();
         }
 
         function filterCategory(cat, btn) {
@@ -341,7 +440,7 @@
 
             document.getElementById('d-image').src = p.image;
             document.getElementById('d-title').innerText = p.name;
-            document.getElementById('d-price').innerText = `Rs. ${p.price.toLocaleString()}`;
+            document.getElementById('d-price').innerText = `Rs. ${Number(p.price).toLocaleString()}`;
             document.getElementById('d-category').innerText = p.category;
             document.getElementById('d-desc').innerText = p.description || 'No description available.';
 
@@ -357,6 +456,69 @@
 
         function closeProductDetail() {
             document.getElementById('productDetailView').classList.add('hidden');
+        }
+
+        function openCityModal() {
+            document.getElementById('cityModal').classList.remove('hidden');
+            renderCityList(pakistaniCities);
+            lucide.createIcons();
+        }
+
+        function closeCityModal() {
+            document.getElementById('cityModal').classList.add('hidden');
+        }
+
+        function renderCityList(cities) {
+            const container = document.getElementById('cityListContainer');
+            container.innerHTML = '';
+            cities.forEach(city => {
+                const item = `
+                    <div onclick="selectCity('${city}')" class="py-3 flex items-center justify-between cursor-pointer hover:bg-slate-50">
+                        <span class="text-slate-700">${city}</span>
+                        ${selectedCity === city ? '<i data-lucide="check" class="w-4 h-4 text-emerald-600"></i>' : ''}
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', item);
+            });
+            lucide.createIcons();
+        }
+
+        function filterCityList() {
+            const query = document.getElementById('citySearchInput').value.toLowerCase();
+            const filtered = pakistaniCities.filter(c => c.toLowerCase().includes(query));
+            renderCityList(filtered);
+        }
+
+        function selectCity(city) {
+            selectedCity = city;
+            document.getElementById('selectedCityText').innerText = city;
+            document.getElementById('selectedCityText').className = "text-slate-900 font-bold";
+            closeCityModal();
+        }
+
+        // Sub-pages handler for FAQ, Feedback, Terms, About
+        function openSubPage(type) {
+            const titles = {
+                faq: 'Frequently Asked Questions',
+                feedback: 'Send Feedback',
+                terms: 'Terms & Conditions',
+                about: 'About M.K TECH'
+            };
+            const contents = {
+                faq: '<p><strong>Q: How can I place an order?</strong><br>A: Simply add items to your cart, fill in your delivery details, and select Cash on Delivery.</p><p><strong>Q: What is delivery time?</strong><br>A: Delivery usually takes 3-5 business days across Pakistan.</p>',
+                feedback: '<p>We love hearing from our customers! Reach out to us directly via WhatsApp or email for any support or feedback.</p>',
+                terms: '<p>All orders placed on M.K TECH are processed under standard retail policies. Cash on Delivery requires correct recipient phone verification.</p>',
+                about: '<p>M.K TECH is your premier online destination for cutting-edge smartwatches, audio gear, and mobile accessories in Pakistan. Powered by secure Firebase infrastructure.</p>'
+            };
+
+            document.getElementById('subPageTitle').innerText = titles[type];
+            document.getElementById('subPageContent').innerHTML = contents[type];
+            document.getElementById('subPageModal').classList.remove('hidden');
+            window.scrollTo(0,0);
+        }
+
+        function closeSubPage() {
+            document.getElementById('subPageModal').classList.add('hidden');
         }
 
         function addToCart(id) {
@@ -392,7 +554,7 @@
                             <img src="${item.image}" class="w-10 h-10 rounded-xl object-cover">
                             <div>
                                 <p class="font-bold text-slate-800">${item.name}</p>
-                                <p class="text-[10px] text-slate-400">Rs. ${item.price.toLocaleString()} x ${item.qty}</p>
+                                <p class="text-[10px] text-slate-400">Rs. ${Number(item.price).toLocaleString()} x ${item.qty}</p>
                             </div>
                         </div>
                         <span class="font-bold text-slate-900">Rs. ${(item.price * item.qty).toLocaleString()}</span>
@@ -404,7 +566,6 @@
             document.getElementById('cartTotalText').innerText = `Rs. ${total.toLocaleString()}`;
         }
 
-        // ================= SUBMIT ORDER DIRECTLY TO FIRESTORE WITH COD =================
         function submitOrderToFirestore() {
             if (cart.length === 0) {
                 alert("Your cart is empty!");
@@ -413,19 +574,18 @@
 
             const name = document.getElementById('custName').value.trim();
             const phone = document.getElementById('custPhone').value.trim();
-            const email = document.getElementById('custEmail').value.trim();
+            const whatsapp = document.getElementById('custWhatsapp').value.trim();
+            const area = document.getElementById('custArea').value.trim();
             const address = document.getElementById('custAddress').value.trim();
-            const city = document.getElementById('custCity').value.trim();
-            const postalCode = document.getElementById('custPostal').value.trim();
+            const landmark = document.getElementById('custLandmark').value.trim();
 
-            if(!name || !phone || !address || !city) {
-                alert("Please fill in your essential shipping details!");
+            if(!name || !phone || !selectedCity || !address) {
+                alert("Please fill in Name, Phone, City, and Full Address!");
                 return;
             }
 
             const orderId = "MK-" + Math.floor(100000 + Math.random() * 900000);
             
-            // Structured Payload with Cash on Delivery info
             const orderPayload = {
                 orderId: orderId,
                 createdAt: new Date().toISOString(),
@@ -441,17 +601,18 @@
                 customerInfo: {
                     name: name,
                     phone: phone,
-                    email: email,
+                    whatsapp: whatsapp,
+                    city: selectedCity,
+                    area: area,
                     address: address,
-                    city: city,
-                    postalCode: postalCode
+                    landmark: landmark
                 }
             };
 
-            // Save to Firestore 'orders' collection
             db.collection("orders").add(orderPayload)
             .then((docRef) => {
-                alert(`✅ Order Placed Successfully via Cash on Delivery!\nOrder ID: ${orderId}\nSaved to Firestore DB!`);
+                // Clean short popup alert as requested
+                alert("✅ Order Placed Successfully!");
                 cart = [];
                 updateCartUI();
                 switchTab('home');
