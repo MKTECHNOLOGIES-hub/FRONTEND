@@ -86,7 +86,7 @@
             <div class="flex items-center gap-2">
                 <div class="relative flex-1">
                     <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                    <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Search gadgets..." 
+                    <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Search gadgets (min 2 letters)..." 
                         class="w-full bg-slate-100/90 text-xs text-slate-800 placeholder-slate-400 pl-10 pr-4 py-3 rounded-2xl focus:outline-none focus:ring-1 focus:ring-slate-300 transition">
                 </div>
             </div>
@@ -105,7 +105,7 @@
             <button onclick="filterCategory('computeraccessories', this)" class="cat-pill bg-slate-100 text-slate-600 px-4 py-2 rounded-xl whitespace-nowrap transition">Computer Accessories</button>
         </div>
 
-        <!-- COMPUTER ACCESSORIES SUB-FILTERS (Appears only when Computer Accessories is selected) -->
+        <!-- COMPUTER ACCESSORIES SUB-FILTERS -->
         <div id="computerSubFilters" class="px-5 hidden flex items-center gap-2 overflow-x-auto hide-scrollbar text-[11px] font-medium pt-1">
             <button onclick="filterSubCategory('all', this)" class="sub-pill active bg-slate-800 text-white px-3 py-1.5 rounded-lg whitespace-nowrap transition">All Computer</button>
             <button onclick="filterSubCategory('Wired Keyboard', this)" class="sub-pill bg-slate-100 text-slate-600 px-3 py-1.5 rounded-lg whitespace-nowrap transition">Wired Keyboard</button>
@@ -129,7 +129,7 @@
             <!-- Dynamic Cart Items -->
         </div>
 
-        <!-- Customer Checkout Info Form (Professional Layout) -->
+        <!-- Customer Checkout Info Form -->
         <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-xs space-y-3">
             <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
                 <i data-lucide="user-check" class="w-4 h-4 text-slate-600"></i> Contact Details
@@ -144,7 +144,6 @@
                 <i data-lucide="map-pin" class="w-4 h-4 text-slate-600"></i> Address Details
             </h3>
             
-            <!-- Custom Select City Trigger Button -->
             <div onclick="openCityModal()" class="w-full bg-slate-100 text-xs p-3 rounded-xl flex items-center justify-between cursor-pointer text-slate-700">
                 <span id="selectedCityText">Select City...</span>
                 <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400"></i>
@@ -155,7 +154,7 @@
             <input type="text" id="custLandmark" placeholder="Mashoor Jagah / Landmark (Optional)" class="w-full bg-slate-100 text-xs p-3 rounded-xl focus:outline-none">
         </div>
 
-        <!-- Payment Method Section (Cash on Delivery) -->
+        <!-- Payment Method Section -->
         <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-xs space-y-2">
             <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Payment Method</h3>
             <label class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 cursor-pointer">
@@ -210,7 +209,7 @@
         </div>
     </section>
 
-    <!-- ================= ORDER HISTORY MODAL WITH 3 CATEGORIES ================= -->
+    <!-- ================= ORDER HISTORY MODAL ================= -->
     <div id="orderHistoryModal" class="fixed inset-0 bg-slate-50 z-50 hidden flex flex-col max-w-md mx-auto">
         <div class="px-5 py-4 flex items-center justify-between border-b border-slate-100 bg-white sticky top-0 z-10">
             <button onclick="closeOrderHistory()" class="p-2 -ml-2 text-slate-700 flex items-center gap-1 text-xs font-semibold">
@@ -220,19 +219,16 @@
             <div class="w-8"></div>
         </div>
 
-        <!-- 3 Status Filter Tabs -->
         <div class="grid grid-cols-3 gap-2 p-4 bg-white border-b border-slate-100 text-xs font-bold">
             <button onclick="switchOrderTab('pending', this)" id="tabBtn-pending" class="order-tab-btn py-2.5 rounded-xl bg-slate-900 text-white transition text-center shadow-xs">Pending</button>
             <button onclick="switchOrderTab('processing', this)" id="tabBtn-processing" class="order-tab-btn py-2.5 rounded-xl bg-slate-100 text-slate-600 transition text-center">Processing</button>
             <button onclick="switchOrderTab('delivered', this)" id="tabBtn-delivered" class="order-tab-btn py-2.5 rounded-xl bg-slate-100 text-slate-600 transition text-center">Delivered</button>
         </div>
 
-        <div id="orderHistoryList" class="flex-1 overflow-y-auto p-4 space-y-3">
-            <!-- Dynamic Orders -->
-        </div>
+        <div id="orderHistoryList" class="flex-1 overflow-y-auto p-4 space-y-3"></div>
     </div>
 
-    <!-- ================= SUB-PAGES MODAL (FAQ, Feedback, Terms, About) ================= -->
+    <!-- ================= SUB-PAGES MODAL ================= -->
     <div id="subPageModal" class="fixed inset-0 bg-white z-50 hidden flex flex-col max-w-md mx-auto">
         <div class="px-5 py-4 flex items-center justify-between border-b border-slate-100 bg-white sticky top-0">
             <button onclick="closeSubPage()" class="p-2 -ml-2 text-slate-700 flex items-center gap-1 text-xs font-semibold">
@@ -241,9 +237,7 @@
             <h2 id="subPageTitle" class="text-xs font-bold text-slate-900 uppercase tracking-wider"></h2>
             <div class="w-8"></div>
         </div>
-        <div id="subPageContent" class="flex-1 overflow-y-auto p-5 text-xs text-slate-600 space-y-3 leading-relaxed">
-            <!-- Dynamic content -->
-        </div>
+        <div id="subPageContent" class="flex-1 overflow-y-auto p-5 text-xs text-slate-600 space-y-3 leading-relaxed"></div>
     </div>
 
     <!-- ================= PRODUCT DETAIL VIEW ================= -->
@@ -298,9 +292,7 @@
                     class="w-full bg-white text-xs text-slate-800 placeholder-slate-400 pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none">
             </div>
         </div>
-        <div id="cityListContainer" class="flex-1 overflow-y-auto px-5 divide-y divide-slate-100 text-xs">
-            <!-- Dynamic Cities List -->
-        </div>
+        <div id="cityListContainer" class="flex-1 overflow-y-auto px-5 divide-y divide-slate-100 text-xs"></div>
     </div>
 
     <!-- ================= BOTTOM NAVIGATION BAR ================= -->
@@ -347,7 +339,6 @@
         let currentOrderTab = 'pending';
         let myUserOrders = [];
 
-        // Pakistani Cities List for Selector
         const pakistaniCities = [
             "Abbas Pur-Azad kashmir", "Abbottabad-Khyber Pakhtunkhwa", "Abdul Hakim-Punjab", 
             "Ahmed Pur East-Punjab", "Ahmedpur Sial-Punjab", "Akora Khattak-Khyber Pakhtunkhwa", 
@@ -459,10 +450,9 @@
             lucide.createIcons();
         }
 
-        // Filter Category & toggle computer sub-filters
         function filterCategory(cat, btn) {
             activeCategory = cat;
-            activeSubCategory = 'all'; // reset sub-filter on main category change
+            activeSubCategory = 'all';
 
             document.querySelectorAll('.cat-pill').forEach(b => {
                 b.className = 'cat-pill bg-slate-100 text-slate-600 px-4 py-2 rounded-xl whitespace-nowrap transition';
@@ -476,7 +466,7 @@
                 subFilterContainer.classList.add('hidden');
             }
 
-            document.getElementById('searchInput').value = ''; // clear search when switching category
+            document.getElementById('searchInput').value = '';
             applyFiltersAndRender();
         }
 
@@ -490,7 +480,7 @@
             applyFiltersAndRender();
         }
 
-        // Ultra-Strong Search Engine (Matches any word, single character, or emoji in title or description)
+        // Smart Search Engine (Requires minimum 2 characters to filter)
         function handleSearch() {
             applyFiltersAndRender();
         }
@@ -508,7 +498,8 @@
                 return catMatch && subMatch;
             });
 
-            if (query !== '') {
+            // Only apply search filter if query length is 2 or more characters
+            if (query.length >= 2) {
                 result = result.filter(p => {
                     const nameStr = (p.name || '').toLowerCase();
                     const descStr = (p.description || '').toLowerCase();
@@ -598,7 +589,6 @@
             closeCityModal();
         }
 
-        // Order History Functions
         function openOrderHistory() {
             document.getElementById('orderHistoryModal').classList.remove('hidden');
             fetchMyOrders();
@@ -684,7 +674,6 @@
             });
         }
 
-        // Sub-pages handler for FAQ, Feedback, Terms, About
         function openSubPage(type) {
             const titles = {
                 faq: 'Frequently Asked Questions',
